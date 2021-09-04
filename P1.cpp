@@ -1,34 +1,52 @@
 #include <iostream>
-#include <string>
+#include <stdlib.h>
 #include <stdio.h>
 
 using namespace std;
 
-int x,y;
+int r,c;
+int matrixA, matrixB;
 
-//cout << 'Please enter Matrix A dimensions \n';
-//cout << 'Matrix A rows: \n';
-//cinn >> x;
-//cout << 'Matrix A columns: \n';
-//cinn >> y;
-//float matrixA[x][y];
-//float matrixB[x][y];
+int main(void){
+  
+  char matrixs[] = {'A','B'};
+  for (int m = 0; m < 2; m++){
+    cout << "Please enter Matrix " << matrixs[m] << " dimensions \n";
+    cout << "Matrix " << matrixs[m]<< " rows \n";
+    cin >> r;
+    cout << "Matrix " << matrixs[m]<< " columns \n";
+    cin >> c;
 
-char matrixs[] = {'A','B'};
-
-int main(){
-  for (int i = 0; i < 2; i++){
-    cout << "Please enter Matrix " << matrixs[i] << " dimensions \n";
-    cout << "Matrix " << matrixs[i]<< " rows \n";
-    cin >> x;
-    cout << "Matrix " << matrixs[i]<< " columns \n";
-    cin >> y;
-
-    if(i == 0){
-      float matrixA[x][y];
+    if(m == 0){
+      **matrixA = malloc(r * sizeof(int *));
+      for(int i = 0; i < r; i++){
+	matrixA[i] = malloc(c * sizeof(int));
+      }
+      cout << "Enter the matrix A elements going by rows:";
+      for(int i = 0; i<r; i++){
+	for(int j = 0; j<c; j++){
+	  cin >> matrixA[i][j];
+	}
+      }
+	
     }else{
-      float matrixB[x][y];
+      **matrixB = malloc(r * sizeof(int *));
+      for(int i = 0; i < r; i++){
+	matrixB[i] = malloc(c * sizeof(int));
+      }      
+      cout << "Enter the matrix B elements going by rows:";
+      for(int i = 0; i<r; i++){
+	for(int j = 0; j<c; j++){
+	  cin >> matrixB[i][j];
+	}
+      }
     }
+  }
+  for(int i=0;i<r;i++){
+    for(int j=0; j<c; j++){
+      cout << matrixA[i][j];
+    }
+    cout<<"\n";
   }
   return 0;
 }
