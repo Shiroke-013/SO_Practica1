@@ -12,65 +12,53 @@ void getMatrixDims(char matrixName, int *rows, int *cols)
     printf("Matrix %c rows \n", matrixName);
     scanf("%d", rows);
     printf("Matrix %c columns \n", matrixName);
-    scanf("%d", cols);
-
-    /*
-    int **matrixA = NULL;
-    matrixA = (int **)malloc(2 * sizeof(int *));
-    matrixA[0] = (int *)malloc(sizeof( *matrixA[0] * 2));
-    matrixA[1] = (int *)malloc(sizeof( *matrixA[0] * 3));
-    matrixA[2] = (int *)malloc(sizeof( *matrixA[0] * 3));
-    matrixA[0][4] = 40;
-    //matrixA[2][0] = 50;
-
-    //printf("Matrix %s value; %p \n", 'A', rows);
-
-    free(matrixA);
-    */
+    scanf("%d", cols); 
 }
 
 
-void setMatrixVals(int **matrix, int r, int c)
+int** createMatrix(int r, int c)
 {
-  //
-  printf("\nHoli\n");
-  matrix = (int **) malloc(r * sizeof(int *));
+  int **matrix = (int **) malloc(r * sizeof(int *));
+
   for(int i = 0; i < r; i++){
     matrix[i] = (int *) malloc(c * sizeof(int));
   }
   
-  printf("Enter the matrix A elements going by rows: ");
+  printf("Enter the matrix A elements going by rows: \n");
 
   for(int i = 0; i<r; i++){
     for(int j = 0; j<c; j++){
-      //scanf("%p", matrix[i][j]);
-      matrix[i][j] = 4;
+      scanf("%d", &matrix[i][j]);
     }
+    printf("\n");
   }
 
-  printf("\nValue: %d\n", matrix[0][0]);
+  return matrix;
 }
+
 
 int main(void){
   
   char matrixs[] = "AB";
+
   for (int m = 0; m < 2; m++){
-    
     if (m == 0)
     {
       getMatrixDims(matrixs[m], &r, &c);
-      setMatrixVals(matrixA, r, c);
+      matrixA = createMatrix(r, c);
     } else {
       getMatrixDims(matrixs[m], &r, &c);
-      setMatrixVals(matrixB, r, c);
+      matrixB = createMatrix(r, c);
     }
-    
   }
-  printf("Aca");
-  printf("%p", matrixA[0][0]);
 
   //Multiply
 
   //Show results
+
+  //Free the resources
+  free(matrixA);
+  free(matrixB);
+
   return 0;
 }
