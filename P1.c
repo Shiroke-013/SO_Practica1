@@ -7,7 +7,8 @@ int **matrixA = NULL;
 int **matrixB = NULL;
 int **matrixC = NULL;
 
-struct t {
+struct threadStruct {
+  int tid;
   int row;
   int column;
 };
@@ -32,14 +33,22 @@ int** createMatrix(char matrixName, int r, int c)
   for(int i = 0; i < r; i++){
     matrix[i] = (int *) malloc(c * sizeof(int));
   }
-  
-  printf("Enter the matrix %c elements going by rows: \n", matrixName);
+
+  if(matrixName == 'B' || matrixName == 'A'){
+    printf("Enter the matrix %c elements going by rows: \n", matrixName);
+    for(int i = 0; i<r; i++){
+      for(int j = 0; j<c; j++){
+	scanf("%d", &matrix[i][j]);
+      }
+      printf("\n");
+    }
+    return matrix;
+  }
 
   for(int i = 0; i<r; i++){
     for(int j = 0; j<c; j++){
-      scanf("%d", &matrix[i][j]);
-    }
-    printf("\n");
+      matrix[i][j] = 0;
+    }    
   }
 
   return matrix;
@@ -62,12 +71,17 @@ int main(void){
 
   //Multiply
   if(cA == rB){
+    matrixC = createMatrix('C', rB, cA);
     //Number of threads to be created
     int nThreads = cA * rB;
+    int t = 0;
     //Creating threads
     pthread_t tid[nThreads];
-    for(int i = 0; i < nThreads; i++){
-      pthread_create(&tid[i], NULL, );
+    for(int i = 0; i < rB; i++){
+      for(int j = 0; j < cA; j++){
+	pthread_create(&tid[t], NULL, );
+	t++;
+      }
     }
     //Waiting threads
     for(int i = 0; i < nThreads; i++){
@@ -76,7 +90,15 @@ int main(void){
   }else{
     printf("Lo lamento pero el numero de columnas de la matriz A debe ser el mismo que el numero de filas de la matriz B");
   }
+
+
   //Show results
+  for(int i = 0; i < rB; i++){
+    for(int j = 0; j < cA; j++){
+      printf("%d\t", matrixC[i][j]);
+    }
+    printf("\n");
+  }
 
   //Free the resources
   free(matrixA);
