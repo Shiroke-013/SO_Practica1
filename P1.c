@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <pthread.h>
 
-int r,c, cA, rB;
+int r,c, cA, rA, rB, cB;
 int **matrixA = NULL;
 int **matrixB = NULL;
 int **matrixC = NULL;
@@ -18,10 +18,10 @@ void getMatrixDims(char matrixName, int *rows, int *cols)
     printf("Please enter Matrix %c dimensions \n", matrixName);
     printf("Matrix %c rows \n", matrixName);
     scanf("%d", rows);
-    if(matrixName == 'B'){rB = r;}
     printf("Matrix %c columns \n", matrixName);
     scanf("%d", cols);
-    if(matrixName == 'A'){cA = c;}
+    if(matrixName == 'B'){rB = *rows; cB = *cols;}
+    if(matrixName == 'A'){cA = *cols; rA = *rows;}
 }
 
 void *multiplication(void* thr){
@@ -29,9 +29,11 @@ void *multiplication(void* thr){
   int actualr = (*myT).row;
   int actualc = (*myT).column;
   int count = 0;
+  
   for(int i = 0; i < cA; i++){
     count += (matrixA[actualr][i] * matrixB[i][actualc]);
   }
+  
   matrixC[actualr][actualc] = count;
 
   free(thr);
@@ -83,17 +85,17 @@ int main(void){
 
   //MULTiPLY
   if(cA == rB){
-    matrixC = createMatrix('C', rB, cA);
+    matrixC = createMatrix('C', rA, cB);
     //NUMBER OF THREADS TO BE CREATED
-    int nThreads = cA * rB;
+    int nThreads = rA * cB;
     int t = 0;
     struct threadStruct *thr;
     
     //CREATiNG THREADS
     pthread_t tid[nThreads];
-    for(int i = 0; i < rB; i++){
-      for(int j = 0; j < cA; j++){
-	thr = (threadStruct *) malloc(sizeof(struct threadStruct));
+    for(int i = 0; i < rA; i++){
+      for(int j = 0; j < cB; j++){
+	thr = (struct threadStruct *) malloc(sizeof(struct threadStruct));
 	(*thr).row = i;
 	(*thr).column = j;
 	pthread_create(&tid[t], NULL, multiplication, (void *)thr);
@@ -110,8 +112,8 @@ int main(void){
 
 
   //Show results
-  for(int i = 0; i < rB; i++){
-    for(int j = 0; j < cA; j++){
+  for(int i = 0; i < rA; i++){
+    for(int j = 0; j < cB; j++){
       printf("%d\t", matrixC[i][j]);
     }
     printf("\n");
