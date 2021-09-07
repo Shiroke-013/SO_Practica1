@@ -8,7 +8,6 @@ int **matrixB = NULL;
 int **matrixC = NULL;
 
 struct threadStruct {
-  int tid;
   int row;
   int column;
 };
@@ -25,6 +24,19 @@ void getMatrixDims(char matrixName, int *rows, int *cols)
     if(matrixName == 'A'){cA = c;}
 }
 
+void *multiplication(void* thr){
+  struct threadStruct *myT = (struct threadStruct*)thr;
+  int actualr = (*myT).row;
+  int actualc = (*myT).column;
+  int count = 0;
+  for(int i = 0; i < cA; i++){
+    count += (matrixA[actualr][i] * matrixB[i][actualc]);
+  }
+  matrixC[actualr][actualc] = count;
+
+  free(thr);
+  return NULL;
+}
 
 int** createMatrix(char matrixName, int r, int c)
 {
@@ -69,17 +81,22 @@ int main(void){
     }
   }
 
-  //Multiply
+  //MULTiPLY
   if(cA == rB){
     matrixC = createMatrix('C', rB, cA);
-    //Number of threads to be created
+    //NUMBER OF THREADS TO BE CREATED
     int nThreads = cA * rB;
     int t = 0;
-    //Creating threads
+    struct threadStruct *thr;
+    
+    //CREATiNG THREADS
     pthread_t tid[nThreads];
     for(int i = 0; i < rB; i++){
       for(int j = 0; j < cA; j++){
-	pthread_create(&tid[t], NULL, );
+	thr = (threadStruct *) malloc(sizeof(struct threadStruct));
+	(*thr).row = i;
+	(*thr).column = j;
+	pthread_create(&tid[t], NULL, multiplication, (void *)thr);
 	t++;
       }
     }
@@ -103,6 +120,7 @@ int main(void){
   //Free the resources
   free(matrixA);
   free(matrixB);
+  free(matrixC);
 
   return 0;
 }
